@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title th:text="${item.id != null ? 'Edit Item' : 'Add Item'} + ' - SmartBiz Manager'">Add Item - SmartBiz Manager</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <main class="container-fluid">
+        <div class="row">
+            <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-box me-2 text-primary"></i>
+                        <span th:text="${item.id != null ? 'Edit Item' : 'Add New Item'}">Add New Item</span>
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a th:href="@{/items}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Back to Items
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Item Form -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-box me-2"></i>
+                                    Item Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/items/save}" th:object="${item}" method="post" class="needs-validation" novalidate data-autosave="item-form">
+                                    <input type="hidden" th:field="*{id}">
+                                    
+                                    <!-- Basic Information -->
+                                    <div class="row">
+                                        <div class="col-md-8 mb-3">
+                                            <label for="name" class="form-label">
+                                                <i class="fas fa-tag me-1"></i>
+                                                Item Name <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="name" 
+                                                   th:field="*{name}" 
+                                                   placeholder="Enter item name"
+                                                   required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid item name.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-3">
+                                            <label for="unit" class="form-label">
+                                                <i class="fas fa-ruler me-1"></i>
+                                                Unit
+                                            </label>
+                                            <select class="form-select" id="unit" th:field="*{unit}">
+                                                <option value="">Select Unit</option>
+                                                <option value="PCS">Pieces (PCS)</option>
+                                                <option value="KG">Kilograms (KG)</option>
+                                                <option value="GRAM">Grams (GRAM)</option>
+                                                <option value="LITER">Liters (LITER)</option>
+                                                <option value="METER">Meters (METER)</option>
+                                                <option value="BOX">Box</option>
+                                                <option value="DOZEN">Dozen</option>
+                                                <option value="PACKET">Packet</option>
+                                                <option value="BOTTLE">Bottle</option>
+                                                <option value="OTHER">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">
+                                            <i class="fas fa-align-left me-1"></i>
+                                            Description
+                                        </label>
+                                        <textarea class="form-control" 
+                                                  id="description" 
+                                                  th:field="*{description}" 
+                                                  rows="3" 
+                                                  placeholder="Enter item description"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="hsn" class="form-label">
+                                            <i class="fas fa-barcode me-1"></i>
+                                            HSN Code
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="hsn" 
+                                               th:field="*{hsn}" 
+                                               placeholder="Enter HSN code">
+                                        <div class="form-text">
+                                            Harmonized System of Nomenclature code for tax purposes
+                                        </div>
+                                    </div>
+
+                                    <!-- Pricing Information -->
+                                    <div class="card border-info mb-4">
+                                        <div class="card-header bg-info text-white">
+                                            <h6 class="mb-0">
+                                                <i class="fas fa-rupee-sign me-2"></i>
+                                                Pricing Information
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="purchasePrice" class="form-label">
+                                                        <i class="fas fa-shopping-bag me-1"></i>
+                                                        Purchase Price <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">₹</span>
+                                                        <input type="number" 
+                                                               class="form-control" 
+                                                               id="purchasePrice" 
+                                                               th:field="*{purchasePrice}" 
+                                                               placeholder="0.00"
+                                                               step="0.01"
+                                                               min="0"
+                                                               required>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid purchase price.
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="salePrice" class="form-label">
+                                                        <i class="fas fa-shopping-cart me-1"></i>
+                                                        Sale Price <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">₹</span>
+                                                        <input type="number" 
+                                                               class="form-control" 
+                                                               id="salePrice" 
+                                                               th:field="*{salePrice}" 
+                                                               placeholder="0.00"
+                                                               step="0.01"
+                                                               min="0"
+                                                               required>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid sale price.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="alert alert-info d-none" id="marginAlert">
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        <span id="marginText"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stock Information -->
+                                    <div class="card border-warning mb-4">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h6 class="mb-0">
+                                                <i class="fas fa-warehouse me-2"></i>
+                                                Stock Information
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="currentStock" class="form-label">
+                                                        <i class="fas fa-boxes me-1"></i>
+                                                        Current Stock
+                                                    </label>
+                                                    <input type="number" 
+                                                           class="form-control" 
+                                                           id="currentStock" 
+                                                           th:field="*{currentStock}" 
+                                                           placeholder="0.00"
+                                                           step="0.01"
+                                                           min="0">
+                                                    <div class="form-text">
+                                                        Current quantity in stock
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="minStock" class="form-label">
+                                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                                        Minimum Stock Level
+                                                    </label>
+                                                    <input type="number" 
+                                                           class="form-control" 
+                                                           id="minStock" 
+                                                           th:field="*{minStock}" 
+                                                           placeholder="0.00"
+                                                           step="0.01"
+                                                           min="0">
+                                                    <div class="form-text">
+                                                        Alert when stock falls below this level
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Actions -->
+                                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                                        <div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Fields marked with <span class="text-danger">*</span> are required
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <a th:href="@{/items}" class="btn btn-secondary me-2">
+                                                <i class="fas fa-times me-1"></i>
+                                                Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save me-1"></i>
+                                                <span th:text="${item.id != null ? 'Update Item' : 'Save Item'}">Save Item</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="row justify-content-center mt-4">
+                    <div class="col-lg-8">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    Tips for Managing Items
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-tag text-primary me-2"></i>Naming</h6>
+                                        <ul class="list-unstyled small">
+                                            <li>• Use clear, descriptive names</li>
+                                            <li>• Include brand or model if applicable</li>
+                                            <li>• Be consistent with naming conventions</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-rupee-sign text-success me-2"></i>Pricing</h6>
+                                        <ul class="list-unstyled small">
+                                            <li>• Set competitive sale prices</li>
+                                            <li>• Consider your profit margins</li>
+                                            <li>• Update prices regularly</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+    
+    <script>
+        // Calculate and display profit margin
+        function calculateMargin() {
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const salePrice = parseFloat(document.getElementById('salePrice').value) || 0;
+            
+            if (purchasePrice > 0 && salePrice > 0) {
+                const margin = ((salePrice - purchasePrice) / purchasePrice * 100).toFixed(2);
+                const profit = (salePrice - purchasePrice).toFixed(2);
+                
+                const marginAlert = document.getElementById('marginAlert');
+                const marginText = document.getElementById('marginText');
+                
+                if (margin >= 0) {
+                    marginAlert.className = 'alert alert-success';
+                    marginText.innerHTML = `Profit Margin: <strong>${margin}%</strong> (₹${profit} profit per unit)`;
+                } else {
+                    marginAlert.className = 'alert alert-danger';
+                    marginText.innerHTML = `Loss: <strong>${Math.abs(margin)}%</strong> (₹${Math.abs(profit)} loss per unit)`;
+                }
+                
+                marginAlert.classList.remove('d-none');
+            } else {
+                document.getElementById('marginAlert').classList.add('d-none');
+            }
+        }
+
+        // Add event listeners for price calculation
+        document.getElementById('purchasePrice').addEventListener('input', calculateMargin);
+        document.getElementById('salePrice').addEventListener('input', calculateMargin);
+
+        // Stock level validation
+        document.getElementById('currentStock').addEventListener('input', function() {
+            const currentStock = parseFloat(this.value) || 0;
+            const minStock = parseFloat(document.getElementById('minStock').value) || 0;
+            
+            if (currentStock <= minStock && minStock > 0) {
+                this.classList.add('border-warning');
+                SmartBiz.showToast('Current stock is below minimum level', 'warning');
+            } else {
+                this.classList.remove('border-warning');
+            }
+        });
+
+        // Initialize margin calculation on page load
+        calculateMargin();
+    </script>
+</body>
+</html>
+

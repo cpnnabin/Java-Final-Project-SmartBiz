@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title th:text="${party.id != null ? 'Edit Party' : 'Add Party'} + ' - SmartBiz Manager'">Add Party - SmartBiz Manager</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <main class="container-fluid">
+        <div class="row">
+            <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-user-plus me-2 text-primary"></i>
+                        <span th:text="${party.id != null ? 'Edit Party' : 'Add New Party'}">Add New Party</span>
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a th:href="@{/parties}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Back to Parties
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Party Form -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user me-2"></i>
+                                    Party Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/parties/save}" th:object="${party}" method="post" class="needs-validation" novalidate data-autosave="party-form">
+                                    <input type="hidden" th:field="*{id}">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-8 mb-3">
+                                            <label for="name" class="form-label">
+                                                <i class="fas fa-user me-1"></i>
+                                                Party Name <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="name" 
+                                                   th:field="*{name}" 
+                                                   placeholder="Enter party name"
+                                                   required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid party name.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-3">
+                                            <label for="partyType" class="form-label">
+                                                <i class="fas fa-tags me-1"></i>
+                                                Party Type <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" 
+                                                    id="partyType" 
+                                                    th:field="*{partyType}" 
+                                                    required>
+                                                <option value="">Select Type</option>
+                                                <option th:each="type : ${partyTypes}" 
+                                                        th:value="${type}" 
+                                                        th:text="${type}">Type</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please select a party type.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">
+                                                <i class="fas fa-envelope me-1"></i>
+                                                Email Address
+                                            </label>
+                                            <input type="email" 
+                                                   class="form-control" 
+                                                   id="email" 
+                                                   th:field="*{email}" 
+                                                   placeholder="Enter email address">
+                                            <div class="invalid-feedback">
+                                                Please provide a valid email address.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <label for="phone" class="form-label">
+                                                <i class="fas fa-phone me-1"></i>
+                                                Phone Number
+                                            </label>
+                                            <input type="tel" 
+                                                   class="form-control" 
+                                                   id="phone" 
+                                                   th:field="*{phone}" 
+                                                   placeholder="Enter phone number">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                            Address
+                                        </label>
+                                        <textarea class="form-control" 
+                                                  id="address" 
+                                                  th:field="*{address}" 
+                                                  rows="3" 
+                                                  placeholder="Enter complete address"></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="gstNumber" class="form-label">
+                                                <i class="fas fa-file-invoice me-1"></i>
+                                                GST Number
+                                            </label>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="gstNumber" 
+                                                   th:field="*{gstNumber}" 
+                                                   placeholder="Enter GST number"
+                                                   pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}">
+                                            <div class="form-text">
+                                                Format: 22AAAAA0000A1Z5 (Optional)
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <label for="openingBalance" class="form-label">
+                                                <i class="fas fa-rupee-sign me-1"></i>
+                                                Opening Balance
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">₹</span>
+                                                <input type="number" 
+                                                       class="form-control" 
+                                                       id="openingBalance" 
+                                                       th:field="*{openingBalance}" 
+                                                       placeholder="0.00"
+                                                       step="0.01"
+                                                       min="0">
+                                            </div>
+                                            <div class="form-text">
+                                                Enter positive amount for receivables, negative for payables
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Actions -->
+                                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                                        <div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Fields marked with <span class="text-danger">*</span> are required
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <a th:href="@{/parties}" class="btn btn-secondary me-2">
+                                                <i class="fas fa-times me-1"></i>
+                                                Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save me-1"></i>
+                                                <span th:text="${party.id != null ? 'Update Party' : 'Save Party'}">Save Party</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="row justify-content-center mt-4">
+                    <div class="col-lg-8">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    Tips for Adding Parties
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-users text-success me-2"></i>Customers</h6>
+                                        <ul class="list-unstyled small">
+                                            <li>• People or businesses who buy from you</li>
+                                            <li>• Positive opening balance = they owe you money</li>
+                                            <li>• Used in Sales Invoices and Payment In</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6><i class="fas fa-truck text-warning me-2"></i>Suppliers</h6>
+                                        <ul class="list-unstyled small">
+                                            <li>• People or businesses you buy from</li>
+                                            <li>• Negative opening balance = you owe them money</li>
+                                            <li>• Used in Purchase and Payment Out</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+    
+    <script>
+        // GST Number validation
+        document.getElementById('gstNumber').addEventListener('input', function() {
+            const gstPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+            const value = this.value.toUpperCase();
+            this.value = value;
+            
+            if (value && !gstPattern.test(value)) {
+                this.setCustomValidity('Please enter a valid GST number');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            this.value = value;
+        });
+
+        // Auto-calculate current balance from opening balance
+        document.getElementById('openingBalance').addEventListener('input', function() {
+            // In a real application, this would be calculated based on transactions
+            // For now, we'll just set current balance equal to opening balance
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title>Dashboard - SmartBiz Manager</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+    <main class="container-fluid">
+        <div class="row">
+            <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                        Dashboard
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-download me-1"></i>
+                                Export
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus me-1"></i>
+                            Quick Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card">
+                            <div class="stats-number" th:text="${totalParties ?: 0}">0</div>
+                            <div class="stats-label">Total Parties</div>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-users me-1"></i>
+                                    <span th:text="${customers ?: 0}">0</span> Customers, 
+                                    <span th:text="${suppliers ?: 0}">0</span> Suppliers
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card">
+                            <div class="stats-number" th:text="${totalItems ?: 0}">0</div>
+                            <div class="stats-label">Total Items</div>
+                            <div class="mt-2">
+                                <small class="text-warning" th:if="${lowStockItems > 0}">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    <span th:text="${lowStockItems}">0</span> Low Stock
+                                </small>
+                                <small class="text-success" th:if="${lowStockItems == 0}">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    All items in stock
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card">
+                            <div class="stats-number">₹0</div>
+                            <div class="stats-label">Total Sales</div>
+                            <div class="mt-2">
+                                <small class="text-info">
+                                    <i class="fas fa-chart-line me-1"></i>
+                                    This Month
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="stats-card">
+                            <div class="stats-number">₹0</div>
+                            <div class="stats-label">Outstanding</div>
+                            <div class="mt-2">
+                                <small class="text-danger">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Pending Payments
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-bolt me-2"></i>
+                                    Quick Actions
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/parties/new}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-user-plus fa-2x mb-2"></i>
+                                            <span>Add Party</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/items/new}" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-box fa-2x mb-2"></i>
+                                            <span>Add Item</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/sales/new}" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                                            <span>Sales Invoice</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/purchase/new}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-shopping-bag fa-2x mb-2"></i>
+                                            <span>Purchase</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/payment-in/new}" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-arrow-down fa-2x mb-2"></i>
+                                            <span>Payment In</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                        <a th:href="@{/expenses/new}" class="btn btn-outline-danger w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <i class="fas fa-receipt fa-2x mb-2"></i>
+                                            <span>Add Expense</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Charts -->
+                <div class="row">
+                    <div class="col-lg-8 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-chart-area me-2"></i>
+                                    Sales Overview
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center py-5">
+                                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Sales chart will be displayed here</p>
+                                    <small class="text-muted">Start adding sales invoices to see your sales trends</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-clock me-2"></i>
+                                    Recent Activity
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center py-4">
+                                    <i class="fas fa-history fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted">No recent activity</p>
+                                    <small class="text-muted">Your recent transactions will appear here</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alert -->
+                <div class="row" th:if="${lowStockItems > 0}">
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Low Stock Alert
+                            </h6>
+                            <p class="mb-2">
+                                You have <strong th:text="${lowStockItems}">0</strong> items running low on stock.
+                            </p>
+                            <a th:href="@{/items/low-stock}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-eye me-1"></i>
+                                View Low Stock Items
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>
+
