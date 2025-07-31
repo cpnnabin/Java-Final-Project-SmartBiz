@@ -1,249 +1,428 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head">
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title} ? ${title} + ' - SmartBiz Manager' : 'SmartBiz Manager'">SmartBiz Manager</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link th:href="@{/style.css}" rel="stylesheet">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>">
+    <title>SmartBiz — Business Made Easy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #29AD81;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: white;
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .brand-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .brand span {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        aside {
+            background: var(--dark);
+            width: 260px;
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            border-right: 3px solid var(--primary);
+        }
+
+        .sidebar-heading {
+            color: #8892b0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 0 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .sidebar-link {
+            color: #a8b2d1;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            margin: 0.2rem 1rem;
+            border-radius: 8px;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(41, 173, 129, 0.1);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .sidebar-link i {
+            width: 18px;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .content-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+        }
+
+        .welcome-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 1rem;
+            background: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin: 0.5rem 0;
+        }
+
+        .footer-section a {
+            color: #ccd6f6;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #8892b0;
+        }
+
+        .app-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .app-badge {
+            height: 45px;
+            transition: var(--transition);
+            border-radius: 8px;
+        }
+
+        .app-badge:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            aside { width: 100%; order: 2; }
+            main { order: 1; padding: 1rem; }
+            nav { display: none; }
+            .welcome-title { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">
-                <i class="fas fa-briefcase me-2"></i>
-                SmartBiz Manager
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/dashboard}" th:classappend="${#request.requestURI == '/dashboard' ? 'active' : ''}">
-                            <i class="fas fa-tachometer-alt me-1"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/parties}" th:classappend="${#strings.startsWith(#request.requestURI, '/parties') ? 'active' : ''}">
-                            <i class="fas fa-users me-1"></i>
-                            Parties
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/items}" th:classappend="${#strings.startsWith(#request.requestURI, '/items') ? 'active' : ''}">
-                            <i class="fas fa-box me-1"></i>
-                            Items
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-file-invoice me-1"></i>
-                            Transactions
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" th:href="@{/sales}">
-                                <i class="fas fa-shopping-cart me-2"></i>Sales Invoice
-                            </a></li>
-                            <li><a class="dropdown-item" th:href="@{/purchase}">
-                                <i class="fas fa-shopping-bag me-2"></i>Purchase
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/payment-in}">
-                                <i class="fas fa-arrow-down text-success me-2"></i>Payment In
-                            </a></li>
-                            <li><a class="dropdown-item" th:href="@{/payment-out}">
-                                <i class="fas fa-arrow-up text-danger me-2"></i>Payment Out
-                            </a></li>
-                            <li><a class="dropdown-item" th:href="@{/expenses}">
-                                <i class="fas fa-receipt me-2"></i>Expenses
-                            </a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/reports}" th:classappend="${#request.requestURI == '/reports' ? 'active' : ''}">
-                            <i class="fas fa-chart-bar me-1"></i>
-                            Reports
-                        </a>
-                    </li>
-                </ul>
-                
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <button id="themeToggle" class="btn theme-toggle me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle theme">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i>
-                            Account
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" th:href="@{/settings}">
-                                <i class="fas fa-cog me-2"></i>Settings
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+<header>
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fas fa-chart-line"></i>
         </div>
+        <span>SmartBiz</span>
+    </div>
+    <nav>
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-star"></i> Features</a>
+        <a href="#"><i class="fas fa-book"></i> Resources</a>
+        <a href="#"><i class="fas fa-envelope"></i> Contact</a>
     </nav>
+    <div class="profile-pic">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile">
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <main class="container-fluid">
-        <div class="row">
-            <!-- Sidebar for larger screens -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse" id="sidebarMenu">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/dashboard}" th:classappend="${#request.requestURI == '/dashboard' ? 'active' : ''}">
-                                <i class="fas fa-tachometer-alt me-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/parties}" th:classappend="${#strings.startsWith(#request.requestURI, '/parties') ? 'active' : ''}">
-                                <i class="fas fa-users me-2"></i>
-                                Parties
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/items}" th:classappend="${#strings.startsWith(#request.requestURI, '/items') ? 'active' : ''}">
-                                <i class="fas fa-box me-2"></i>
-                                Items
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                                <span>Transactions</span>
-                            </h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/sales}">
-                                <i class="fas fa-shopping-cart me-2"></i>
-                                Sales Invoice
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/purchase}">
-                                <i class="fas fa-shopping-bag me-2"></i>
-                                Purchase
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/payment-in}">
-                                <i class="fas fa-arrow-down text-success me-2"></i>
-                                Payment In
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/payment-out}">
-                                <i class="fas fa-arrow-up text-danger me-2"></i>
-                                Payment Out
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/expenses}">
-                                <i class="fas fa-receipt me-2"></i>
-                                Expenses
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                                <span>Reports</span>
-                            </h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/reports}">
-                                <i class="fas fa-chart-bar me-2"></i>
-                                Reports
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+<div class="container">
+    <aside>
+        <div class="sidebar-heading">Main</div>
+        <a class="sidebar-link active" href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-users"></i> Parties</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-box"></i> Items</a>
 
-            <!-- Page Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- Flash Messages -->
-                <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <span th:text="${success}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                
-                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <span th:text="${error}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                
-                <div th:if="${warning}" class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <span th:text="${warning}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                
-                <div th:if="${info}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <span th:text="${info}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+        <div class="sidebar-heading">Transactions</div>
+        <a class="sidebar-link" href="#"><i class="fas fa-shopping-cart"></i> Sales Invoice</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-shopping-bag"></i> Purchase</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-arrow-down"></i> Payment In</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-arrow-up"></i> Payment Out</a>
+        <a class="sidebar-link" href="#"><i class="fas fa-receipt"></i> Expenses</a>
 
-                <!-- Page Content Goes Here -->
-                <div th:fragment="content">
-                    <!-- This will be replaced by page-specific content -->
+        <div class="sidebar-heading">Reports</div>
+        <a class="sidebar-link" href="#"><i class="fas fa-chart-bar"></i> Reports</a>
+    </aside>
+
+    <main>
+        <div class="content-card">
+            <h1 class="welcome-title">Welcome to SmartBiz</h1>
+            <p class="welcome-subtitle">
+                SmartBiz helps you track sales, control inventory, manage expenses, and grow your business with ease. Get insights and streamline your workflow.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">₹2,45,680</div>
+                    <div class="stat-label">Total Revenue</div>
                 </div>
-            </main>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-value">1,234</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">567</div>
+                    <div class="stat-label">Active Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-value">89</div>
+                    <div class="stat-label">Products</div>
+                </div>
+            </div>
         </div>
     </main>
+</div>
 
-    <!-- Footer -->
-    <footer th:fragment="footer" class="footer mt-auto py-3 bg-light">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    <span class="text-muted">© 2024 SmartBiz Manager. All rights reserved.</span>
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <div class="brand">
+                <div class="brand-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3079/3079057.png" alt="SmartBiz" style="width: 25px; height: 25px;">
                 </div>
-                <div class="col-md-6 text-end">
-                    <span class="text-muted">Version 1.0.0</span>
-                </div>
+                <span>SmartBiz</span>
+            </div>
+            <p style="margin-top: 1rem; color: #8892b0; line-height: 1.6;">
+                Nepal's trusted business management app. Track sales, manage expenses, maintain ledgers, and control inventory.
+            </p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Help Center</h4>
+            <ul>
+                <li><a href="#">Blogs</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Tutorials</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Others</h4>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="#">Our Features</a></li>
+                <li><a href="#">Download</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Get the App</h4>
+            <div class="app-badges">
+                <img class="app-badge" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                <img class="app-badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
             </div>
         </div>
-    </footer>
-
-    <!-- Scripts -->
-    <div th:fragment="scripts">
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        
-        <!-- Custom JS -->
-        <script th:src="@{/main.js}"></script>
     </div>
+
+    <div class="footer-bottom">
+        © 2025 BizSphere LLC. All rights reserved.
+    </div>
+</footer>
 </body>
 </html>
-
